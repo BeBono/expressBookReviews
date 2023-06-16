@@ -4,10 +4,26 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+var entries = Object.entries(books);
+var keys = Object.keys(books);
 
+
+ //Register user
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented....."});
+ 
+    const username = req.body.username;
+    const password = req.body.password;
+  
+    if (username && password) {
+      if (!isValid(username)) {
+        users.push({"username":username,"password":password}); //"users" es una variable local, por lo que si queremos ver los usuarios creados, debemos consultarlos dentro de esta función, ya que si lo hacemos en el ábito global nos mostrará el arreglo vacío "users = []" como inicialmente se creó globalmente. Para solucionarlo, debemos exponer la variable en el ambito global (que no hacemos aqui).
+        return res.status(200).json({message: "User successfully registred. Now you can login"});
+      } else {
+        return res.status(404).json({message: "User already exists!"});
+      }
+    }
+    return res.status(404).json({message: "Unable to register user. Enter all data required for registration."});
+
 });
 
 
