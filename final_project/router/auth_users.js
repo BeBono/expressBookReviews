@@ -63,13 +63,46 @@ regd_users.post("/login", (req,res) => { // "regiter/login"
   } else {
     return res.status(208).json({message: "Invalid Login. Check username and password"});
   }});
-  
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+  var iisbn = req.params.isbn; // Carga el nombre del title del parámetro "isbn" enviada con la solicitud GET.
+  var reV = req.query.reviews; // Hace referencia a la query string o parámetros dinámicos que pasemos en la url.
+  
+  const isbnValid = (indice) =>{ //returns  boolean
+      return books.hasOwnProperty(indice); //El método "hasOwnProperty" devuelve true o false si el objeto contiene la clave dada como argumento.
+    }
+
+  
+  if (!isbnValid(iisbn)) {  
+          return res.status(404).json({message:`Entry an isbn valid. The isbn ${iisbn} Not Found`}); 
+          
+  } else {
+
+      for (var i = 0; i < keys.length; i++) { //Se crea una ciclo para iterar el objeto. El mensaje con status 400 No found, debe quedar fuera de esta iteración.
+         
+          if  ( keys[i] === iisbn ) {  //Cuando encuentra coincidencia exacta con el isbn solicitado entonces ejecuta:        
+           
+              (entries[i][1]["reviews"])[global] = reV; // No es posible utilizar el método push porque el comentario debe ir dentro de un objeto {}, por tal razón hay que utilizar la notacón para agregar propiedades a objetos (y no para arreglos). Observar que la ruta del objeto debe ir entre parénteis "(entries[i][1]["reviews"])" para que pueda funcionar la creación de la clave(key) dinámica [global].
+         
+
+              //Showing all details of book with reviews:
+              const a=[]; //Preparando un arreglo vacío.
+              const outArray = entries[i]; //Extrae el arreglo(antes propiedad) según el índice, pero de esta forma no se puede transformar en un objeto ya que lo debemos anidar en el arreglo vacío "a".
+              a.push(outArray); //Agregando al arreglo vacío "a" el arreglo(antes propiedad) para hacerlo apto a fin de convertirlo a un objeto.
+              const out = Object.fromEntries(a); //Convierte el arreglo cargado en "a" en un objeto.
+              res.send(out); //Muestra la propiedad del objeto tratada.
+        
+              }
+    
+          } 
+   
+      }
+
+  });
+
+
+
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
