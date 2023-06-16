@@ -186,10 +186,32 @@ public_users.get('/title/:title',function (req, res) { //Rout de una solicitud G
 });
 
 
-//  Get book review
+// Get book reviews under isbn:
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+
+  var iisbn = req.params.isbn; // Carga el nombre del title del parámetro "isbn" enviada con la solicitud GET.
+  
+  const isbnValid = (indice) =>{ //returns  boolean
+      return books.hasOwnProperty(indice); //El método "hasOwnProperty" devuelve true o false si el objeto contiene la clave dada como argumento.
+    }
+
+  
+     if (!isbnValid(iisbn)) {  
+                  return res.status(404).json({message:`Entry an isbn valid. The isbn ${iisbn} Not Found`}); 
+                  
+       } else {
+
+              for (var i = 0; i < keys.length; i++) { //Se crea una ciclo para iterar el objeto. El mensaje con status 400 No found, debe quedar fuera de esta iteración.
+     
+                  if  ( keys[i] === iisbn ) { 
+                                        
+                      res.send(entries[i][1]["reviews"]);
+                
+                  }              
+              }
+          }
 });
+
+
 
 module.exports.general = public_users;
