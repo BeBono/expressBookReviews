@@ -77,11 +77,58 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 });
   
+
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+public_users.get('/author/:author',function (req, res) { //Rout de una solicitud GET
+  var iAuthor = req.params.author; // Carga el nombre del author del parámetro "author" enviada con la solicitud GET.
+
+      
+function outcome () {
+
+const authorValid = (inAuthor)=>{ //returns  boolean
+
+      for (var i = 0; i < keys.length; i++) { //Se crea una ciclo para iterar el objeto. El mensaje con status 400 Not found, debe quedar fuera de esta iteración.
+     
+           if  ( books[keys[i]].author === inAuthor ) { //Para validar si existe el nombre del author dentro del objeto. Si el nombre del author coincide, entonces filtar toda la información relacionada a ese author:
+                   
+                 return true;
+           }     
+     
+       }
+
+                 return false;
+   }
+
+  
+     if (!authorValid(iAuthor)) {  //If it's false then show negative response.
+                  return res.status(404).json({message:`Entry an author valid. Not Found`}); 
+                  
+       } else {
+                 
+                  const filteredElements = Object.entries(books).filter(([key, value]) => value.author === iAuthor); //Entries pasa el objeto a un arreglo, luego se aplica el filtro bajo una función en la "key" o el "value", pero solo necesitaremos "value" y el criterio que es "author" con el condicional. 
+                  const filteredObject = Object.fromEntries(filteredElements); //Convierte el arreglo nuevamente a un objeto.
+                  res.send(filteredObject); //Muestra el filtrado como objeto.
+ 
+      
+          }
+
+} //closing outcome function 
+
+
+// CALLBACK PROMISE:
+
+          const getBooks = new Promise((resolve, reject) => {  
+
+              resolve(
+                outcome ()
+              );
+
+          });
+
+          getBooks.then(() => console.log("The Task 12 has been resolved!")); //Call back.
+  
 });
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
