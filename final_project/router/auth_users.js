@@ -5,9 +5,28 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username)=>{ //returns boolean
-//write code to check is the username is valid
+//common variables to filter:
+var keys = Object.keys(books); // Obtiene los llaves/claves/keys de cada propiedad del objeto. 
+var entries = Object.entries(books); //Convierte el objeto en un array.
+
+var global; //Variable global que tomará el valor de la variable username (local) trabajado dentro de la router login.
+
+
+
+const isValid = (username)=>{ //returns boolean to validate is user already exist.
+
+    let userswithsamename = users.filter((user)=>{
+        return user.username === username;
+      });
+      if(userswithsamename.length > 0){
+        return true;
+      } else {
+        return false;
+      }
+
 }
+
+
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
