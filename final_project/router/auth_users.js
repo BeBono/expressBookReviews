@@ -102,6 +102,44 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   });
 
 
+ // Delete a book review
+ regd_users.delete("/auth/review/:isbn", (req, res) => {
+  var iisbn = req.params.isbn; // Carga el nombre del title del parámetro "isbn" enviada con la solicitud GET.
+  var reV = req.query.reviews; // Hace referencia a la query string o parámetros dinámicos que pasemos en la url.
+
+  const isbnValid = (indice) =>{ //returns  boolean
+      return books.hasOwnProperty(indice); //El método "hasOwnProperty" devuelve true o false si el objeto contiene la clave dada como argumento.
+    }
+
+  
+  if (!isbnValid(iisbn)) {  
+          return res.status(404).json({message:`Entry an isbn valid. The isbn ${iisbn} Not Found`}); 
+          
+  } else {
+
+
+      for (var i = 0; i < keys.length; i++) { //Se crea una ciclo para iterar el objeto. El mensaje con status 400 No found, debe quedar fuera de esta iteración.
+             
+          if  ( keys[i] === iisbn ) {  //Cuando encuentra coincidencia exacta con el isbn solicitado entonces ejecuta:        
+           
+          delete (entries[i][1]["reviews"])[global]; //Borra el review from the username loaded in global.
+              
+          //Showing all details of book with reviews:
+          const a=[]; //Preparando un arreglo vacío.
+          const outArray = entries[i]; //Extrae el arreglo(antes propiedad) según el índice, pero de esta forma no se puede transformar en un objeto ya que lo debemos anidar en el arreglo vacío "a".
+          a.push(outArray); //Agregando al arreglo vacío "a" el arreglo(antes propiedad) para hacerlo apto a fin de convertirlo a un objeto.
+          const out = Object.fromEntries(a); //Convierte el arreglo cargado en "a" en un objeto.
+          res.send(out); //Muestra la propiedad del objeto .
+            
+        
+      }
+    
+   }        
+
+}     
+
+});
+
 
 
 module.exports.authenticated = regd_users;
