@@ -221,7 +221,12 @@ public_users.get('/review/:isbn',function (req, res) {
      
                   if  ( keys[i] === iisbn ) { 
                                         
-                      res.send(entries[i][1]["reviews"]);
+                      // res.send(entries[i][1]["reviews"]);
+
+                      const review = (entries[i][1]["reviews"]);
+                      const title = (entries[i][1]["title"]);
+                      const revObject = {review, title};
+                      res.send(revObject);
                 
                   }              
               }
