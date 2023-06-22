@@ -159,7 +159,7 @@ public_users.get('/title/:title',function (req, res) { //Rout de una solicitud G
 
        for (var i = 0; i < keys.length; i++) { //Se crea una ciclo para iterar el objeto. El mensaje con status 400 No found, debe quedar fuera de esta iteración.
       
-            if  ( books[keys[i]].title === intitle ) { //Para validar si existe el nombre del título dentro del objeto. Si el nombre del author coincide, entonces filtar toda la información relacionada a ese author:
+            if  ( books[keys[i]].title === intitle ) { //Para validar si existe el nombre del título dentro del objeto. Si el nombre del título coincide, entonces filtar toda la información relacionada con ese títuloo:
                     
                   return true;
             }     
